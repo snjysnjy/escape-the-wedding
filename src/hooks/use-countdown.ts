@@ -34,10 +34,12 @@ function computeTimeLeft(now: number, extensionDays: number): TimeLeft {
 
 export function useCountdown(extensionDays = 0) {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(() =>
-    computeTimeLeft(Date.now(), extensionDays)
+    computeTimeLeft(getTargetDate(extensionDays).getTime(), extensionDays)
   );
 
   useEffect(() => {
+    setTimeLeft(computeTimeLeft(Date.now(), extensionDays));
+
     const timer = setInterval(() => {
       setTimeLeft(computeTimeLeft(Date.now(), extensionDays));
     }, 1000);

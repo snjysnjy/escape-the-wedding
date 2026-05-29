@@ -6,10 +6,8 @@ import {
   TabTriggerSlotProps,
   TabListProps,
 } from 'expo-router/ui';
-import { SymbolView } from 'expo-symbols';
 import { Pressable, useColorScheme, View, StyleSheet } from 'react-native';
 
-import { ExternalLink } from './external-link';
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
@@ -67,17 +65,6 @@ export function CustomTabList(props: TabListProps) {
         </ThemedText>
 
         {props.children}
-
-        <ExternalLink href="https://docs.expo.dev" asChild>
-          <Pressable style={styles.externalPressable}>
-            <ThemedText type="link">Docs</ThemedText>
-            <SymbolView
-              tintColor={PremiumColors.textSecondary}
-              name={{ ios: 'arrow.up.right.square', web: 'link' }}
-              size={12}
-            />
-          </Pressable>
-        </ExternalLink>
       </ThemedView>
     </View>
   );
@@ -86,22 +73,26 @@ export function CustomTabList(props: TabListProps) {
 const styles = StyleSheet.create({
   tabListContainer: {
     position: 'absolute',
+    bottom: 0,
     width: '100%',
-    padding: Spacing.two,
+    paddingHorizontal: Spacing.two,
+    paddingTop: 8,
+    paddingBottom: 12,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
+    backgroundColor: 'rgba(2, 2, 2, 0.72)',
   },
   innerContainer: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingVertical: 7,
+    paddingHorizontal: 8,
     borderRadius: 8,
     flexDirection: 'row',
     alignItems: 'center',
     flexGrow: 1,
-    gap: 8,
+    gap: 6,
     maxWidth: MaxContentWidth,
-    backgroundColor: 'rgba(17, 24, 39, 0.9)',
+    backgroundColor: 'rgba(17, 13, 10, 0.96)',
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: PremiumColors.border,
   },
@@ -113,9 +104,9 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   tabButtonView: {
-    minHeight: 34,
+    minHeight: 40,
     paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
     borderRadius: 6,
     justifyContent: 'center',
   },
@@ -130,12 +121,5 @@ const styles = StyleSheet.create({
   },
   tabLabelActive: {
     color: PremiumColors.cyan,
-  },
-  externalPressable: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 4,
-    marginLeft: 8,
   },
 });

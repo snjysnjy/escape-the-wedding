@@ -32,7 +32,7 @@ export function AnimatedGradientBackground() {
   }));
 
   return (
-    <View style={StyleSheet.absoluteFill} pointerEvents="none">
+    <View style={styles.wrap} pointerEvents="none">
       <View style={styles.base} />
       <View style={styles.topBand} />
       <Animated.View style={[styles.signalBand, washStyle]} />
@@ -43,6 +43,10 @@ export function AnimatedGradientBackground() {
 }
 
 const styles = StyleSheet.create({
+  wrap: {
+    ...StyleSheet.absoluteFill,
+    zIndex: 0,
+  },
   base: {
     ...StyleSheet.absoluteFill,
     backgroundColor: PremiumColors.background,

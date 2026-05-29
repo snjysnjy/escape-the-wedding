@@ -108,6 +108,13 @@ export default function HomeScreen() {
   }, []);
 
   const totalApproved = approvedSubmissions + approvedOffers;
+  const pendingCount = applications.filter(a => a.status === 'pending').length;
+  const submissionsTowardExtension = approvedSubmissions % 10;
+  const offersTowardExtension = approvedOffers % 2;
+  const submissionsNeeded = 10 - submissionsTowardExtension;
+  const offersNeeded = 2 - offersTowardExtension;
+  const submissionProgress = Math.min(100, (submissionsTowardExtension / 10) * 100);
+  const offerProgress = Math.min(100, (offersTowardExtension / 2) * 100);
   const mitigation = Math.min(35, totalApproved * 4);
   const probability = getMarriageProbability(timeLeft.days, mitigation);
   const probabilityLabel = useMemo(
@@ -167,52 +174,78 @@ export default function HomeScreen() {
           showsVerticalScrollIndicator={false}
         >
           <LuxuryHeader />
-          <SectionNav active={activeSection} onSelect={scrollToSection} />
 
-          {/* Morphing Avatar Section */}
-          <Animated.View entering={FadeIn.duration(800)} style={styles.avatarSection}>
-            <View style={styles.avatarContainer}>
-              <Animated.Image 
-                source={BRIDAL_AVATAR}
-                style={[styles.avatarImg, shaadiStyle]} 
-              />
-              <Animated.Image 
-                source={CORPORATE_AVATAR}
-                style={[styles.avatarImg, corporateStyle]} 
-              />
-            </View>
-            <Text style={[styles.personaLabel, { color: isCorporate ? PremiumColors.cyan : PremiumColors.gold }]}>
-              {isCorporate ? '✨ Corporate Baddie Mode ✨' : '💍 Incoming Shaadi Mode 💍'}
-            </Text>
-          </Animated.View>
-
-          <Animated.View entering={FadeIn.duration(800)} style={styles.intro}>
-            <Text style={styles.kicker}>The Ultimatum Status</Text>
-            <View style={styles.briefBlock}>
-              <Text style={styles.briefHeading}>Objective</Text>
-              <Text style={styles.subtitle}>Secure employment before the deadline.</Text>
-
-              <Text style={styles.briefHeading}>Ways To Extend Time</Text>
-              <View style={styles.briefRules}>
-                <View style={styles.briefRule}>
-                  <Text style={styles.briefRuleTitle}>10 Approved Job Submissions</Text>
-                  <Text style={styles.briefRuleValue}>+14 days</Text>
+          <View onLayout={handleSectionLayout('countdown')}>
+            <Animated.View entering={FadeIn.duration(800)} style={styles.openingHero}>
+              <View style={styles.avatarStage}>
+                <View style={styles.avatarGlow} />
+                <View style={styles.avatarContainer}>
+                  <Animated.Image
+                    source={BRIDAL_AVATAR}
+                    style={[styles.avatarImg, shaadiStyle]}
+                  />
+                  <Animated.Image
+                    source={CORPORATE_AVATAR}
+                    style={[styles.avatarImg, corporateStyle]}
+                  />
                 </View>
-                <View style={styles.briefRule}>
-                  <Text style={styles.briefRuleTitle}>2 Approved Offer Letters</Text>
-                  <Text style={styles.briefRuleValue}>+30 days</Text>
+                <Text style={[styles.personaLabel, { color: isCorporate ? PremiumColors.cyan : PremiumColors.gold }]}>
+                  {isCorporate ? 'Corporate Mode' : 'Shaadi Risk Mode'}
+                </Text>
+              </View>
+
+              <View style={styles.heroCopy}>
+                <Text style={styles.kicker}>Wedding Deferral Command</Text>
+                <Text style={styles.mobileHeroTitle}>
+                  {timeLeft.days} days to secure employment
+                </Text>
+                <Text style={styles.mobileHeroSubtitle}>
+                  Deadline: {targetLabel}
+                </Text>
+              </View>
+
+              <View style={styles.miniCountdown}>
+                <View style={styles.timeChip}>
+                  <Text style={styles.timeChipValue}>{padTime(timeLeft.hours)}</Text>
+                  <Text style={styles.timeChipLabel}>Hours</Text>
+                </View>
+                <View style={styles.timeChip}>
+                  <Text style={styles.timeChipValue}>{padTime(timeLeft.minutes)}</Text>
+                  <Text style={styles.timeChipLabel}>Minutes</Text>
+                </View>
+                <View style={styles.timeChip}>
+                  <Text style={styles.timeChipValue}>{padTime(timeLeft.seconds)}</Text>
+                  <Text style={styles.timeChipLabel}>Seconds</Text>
                 </View>
               </View>
 
-              <Text style={styles.briefHeading}>Verification</Text>
-              <Text style={styles.subtitle}>All evidence is subject to administrative review.</Text>
+            </Animated.View>
 
-              <Text style={styles.briefHeading}>Consequence</Text>
-              <Text style={styles.subtitle}>Grandmothers may initiate groom discovery operations.</Text>
+            <SectionNav active={activeSection} onSelect={scrollToSection} />
+
+            <View style={styles.extensionTiles}>
+              <View style={styles.extensionTile}>
+                <Text style={styles.tileLabel}>Job Submissions</Text>
+                <Text style={styles.tileValue}>10 = +14 days</Text>
+                <View style={styles.progressTrack}>
+                  <View style={[styles.progressFill, { width: `${submissionProgress}%` }]} />
+                </View>
+                <Text style={styles.tileMeta}>
+                  {submissionsNeeded} more for next extension
+                </Text>
+              </View>
+              <View style={styles.extensionTile}>
+                <Text style={styles.tileLabel}>Offer Letters</Text>
+                <Text style={styles.tileValue}>2 = +30 days</Text>
+                <View style={styles.progressTrack}>
+                  <View style={[styles.progressFill, { width: `${offerProgress}%` }]} />
+                </View>
+                <Text style={styles.tileMeta}>
+                  {offersNeeded} more for next extension
+                </Text>
+              </View>
             </View>
-          </Animated.View>
 
-          <View onLayout={handleSectionLayout('countdown')}>
             <GlassCard enteringDelay={100} variant="hero">
               <Text style={styles.sectionLabel}>Time remaining</Text>
               <View style={styles.heroBlock}>
@@ -250,12 +283,34 @@ export default function HomeScreen() {
                 </View>
                 <View style={styles.heroStatDivider} />
                 <View style={styles.heroStat}>
-                  <Text style={styles.heroStatValue}>{applications.filter(a => a.status === 'pending').length}</Text>
+                  <Text style={styles.heroStatValue}>{pendingCount}</Text>
                   <Text style={styles.heroStatLabel}>Pending Admin</Text>
                 </View>
               </View>
             </GlassCard>
           </View>
+
+          <Animated.View entering={FadeIn.duration(800)} style={styles.intro}>
+            <GlassCard enteringDelay={140} style={styles.missionCard}>
+              <Text style={styles.kicker}>The Ultimatum Status</Text>
+              <View style={styles.briefBlock}>
+                <View>
+                  <Text style={styles.briefHeading}>Objective</Text>
+                  <Text style={styles.subtitle}>Secure employment before the deadline.</Text>
+                </View>
+
+                <View>
+                  <Text style={styles.briefHeading}>Verification</Text>
+                  <Text style={styles.subtitle}>All evidence is subject to administrative review.</Text>
+                </View>
+
+                <View>
+                  <Text style={styles.briefHeading}>Consequence</Text>
+                  <Text style={styles.subtitle}>Grandmothers may initiate groom discovery operations.</Text>
+                </View>
+              </View>
+            </GlassCard>
+          </Animated.View>
 
           <View onLayout={handleSectionLayout('probability')}>
             <GlassCard enteringDelay={180}>
@@ -268,7 +323,10 @@ export default function HomeScreen() {
 
           <View onLayout={handleSectionLayout('monitoring')}>
             <GlassCard enteringDelay={240}>
-              <Text style={styles.sectionLabel}>Grandma Monitoring Status</Text>
+              <View style={styles.monitorHeader}>
+                <Text style={[styles.sectionLabel, styles.monitorTitle]}>Grandma Monitoring Status</Text>
+                <Text style={styles.threatPill}>Threat {probability}%</Text>
+              </View>
               <Animated.Text
                 key={monitorIndex}
                 entering={FadeInUp.duration(450)}
@@ -300,20 +358,21 @@ export default function HomeScreen() {
             </GlassCard>
           </View>
 
-          <View style={styles.actions}>
-            <PremiumButton
-              label="Upload Proof of Hustle"
-              variant="primary"
-              onPress={() => router.push('/upload')}
-            />
-          </View>
-
           <Text style={styles.footer}>
             {applications.length > 0
               ? `${applications.length} submission${applications.length === 1 ? '' : 's'} · Pending / Approved / Rejected`
               : 'Submit proof on the Upload tab. Admin review controls extensions.'}
           </Text>
+          <View style={styles.bottomSpacer} />
         </ScrollView>
+
+        <View style={styles.floatingCta}>
+          <PremiumButton
+            label="Upload Proof"
+            variant="primary"
+            onPress={() => router.push('/upload')}
+          />
+        </View>
       </SafeAreaView>
     </View>
   );
@@ -326,28 +385,49 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
+    zIndex: 1,
   },
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: PremiumSpacing.lg,
     paddingTop: Platform.OS === 'android' ? PremiumSpacing.md : PremiumSpacing.sm,
-    paddingBottom: Platform.OS === 'android' ? 48 : PremiumSpacing.xxl,
+    paddingBottom: Platform.OS === 'android' ? 140 : 148,
     maxWidth: 480,
     width: '100%',
     alignSelf: 'center',
   },
-  avatarSection: {
+  openingHero: {
     alignItems: 'center',
-    marginVertical: PremiumSpacing.lg,
+    paddingTop: 6,
+    paddingBottom: PremiumSpacing.lg,
+  },
+  avatarStage: {
+    alignItems: 'center',
+    marginTop: PremiumSpacing.sm,
+    marginBottom: PremiumSpacing.md,
+  },
+  avatarGlow: {
+    position: 'absolute',
+    width: 190,
+    height: 190,
+    borderRadius: 95,
+    backgroundColor: PremiumColors.redSoft,
+    opacity: 0.72,
+    top: -16,
   },
   avatarContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 156,
+    height: 156,
+    borderRadius: 78,
     overflow: 'hidden',
-    borderWidth: 2,
-    borderColor: PremiumColors.cyan,
+    borderWidth: 3,
+    borderColor: PremiumColors.gold,
     position: 'relative',
+    backgroundColor: PremiumColors.surface,
+    shadowColor: PremiumColors.red,
+    shadowOpacity: 0.24,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: 14 },
   },
   avatarImg: {
     width: '100%',
@@ -358,52 +438,125 @@ const styles = StyleSheet.create({
   },
   personaLabel: {
     ...PremiumTypography.body,
-    marginTop: 12,
+    marginTop: 14,
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 13,
+    textTransform: 'uppercase',
   },
   intro: {
+    marginBottom: PremiumSpacing.md,
+  },
+  heroCopy: {
+    alignItems: 'center',
     marginBottom: PremiumSpacing.md,
   },
   kicker: {
     ...PremiumTypography.overline,
     marginBottom: PremiumSpacing.sm,
+    textAlign: 'center',
+  },
+  mobileHeroTitle: {
+    ...PremiumTypography.title,
+    fontSize: 32,
+    lineHeight: 38,
+    textAlign: 'center',
+    color: PremiumColors.goldLight,
+    maxWidth: 340,
+  },
+  mobileHeroSubtitle: {
+    ...PremiumTypography.caption,
+    marginTop: PremiumSpacing.sm,
+    color: PremiumColors.textSecondary,
+    textAlign: 'center',
+  },
+  miniCountdown: {
+    flexDirection: 'row',
+    gap: 8,
+    width: '100%',
+    marginBottom: PremiumSpacing.md,
+  },
+  timeChip: {
+    flex: 1,
+    minHeight: 70,
+    borderRadius: 8,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: PremiumColors.borderStrong,
+    backgroundColor: 'rgba(18, 18, 18, 0.72)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  timeChipValue: {
+    ...PremiumTypography.status,
+    color: PremiumColors.textPrimary,
+    fontSize: 24,
+    lineHeight: 30,
+    fontVariant: ['tabular-nums'],
+  },
+  timeChipLabel: {
+    ...PremiumTypography.caption,
+    color: PremiumColors.textMuted,
+    fontSize: 9,
   },
   subtitle: {
     ...PremiumTypography.subtitle,
     maxWidth: 380,
   },
+  missionCard: {
+    paddingVertical: 18,
+  },
   briefBlock: {
-    gap: 10,
+    gap: 14,
   },
   briefHeading: {
     ...PremiumTypography.overline,
     color: PremiumColors.gold,
-    marginTop: 6,
+    marginBottom: 4,
   },
-  briefRules: {
+  extensionTiles: {
+    flexDirection: 'row',
     gap: 8,
+    marginBottom: PremiumSpacing.md,
   },
-  briefRule: {
+  extensionTile: {
+    flex: 1,
+    minHeight: 128,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: PremiumColors.border,
+    borderColor: PremiumColors.borderStrong,
     borderRadius: 8,
     paddingHorizontal: 12,
-    paddingVertical: 10,
-    backgroundColor: PremiumColors.surfacePressed,
+    paddingVertical: 12,
+    backgroundColor: 'rgba(18, 18, 18, 0.78)',
   },
-  briefRuleTitle: {
-    ...PremiumTypography.body,
-    color: PremiumColors.textPrimary,
-    fontSize: 13,
-    fontWeight: '600',
+  tileLabel: {
+    ...PremiumTypography.caption,
+    color: PremiumColors.textTertiary,
+    fontSize: 9,
   },
-  briefRuleValue: {
+  tileValue: {
     ...PremiumTypography.status,
-    color: PremiumColors.cyan,
-    fontSize: 18,
-    lineHeight: 24,
-    marginTop: 2,
+    color: PremiumColors.textPrimary,
+    fontSize: 20,
+    lineHeight: 26,
+    marginTop: 8,
+  },
+  tileMeta: {
+    ...PremiumTypography.body,
+    color: PremiumColors.textMuted,
+    fontSize: 11,
+    lineHeight: 15,
+    marginTop: 8,
+  },
+  progressTrack: {
+    height: 5,
+    borderRadius: 8,
+    backgroundColor: PremiumColors.probabilityTrack,
+    overflow: 'hidden',
+    marginTop: 10,
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 8,
+    backgroundColor: PremiumColors.gold,
   },
   sectionLabel: {
     ...PremiumTypography.overline,
@@ -493,6 +646,28 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: PremiumColors.textTertiary,
   },
+  monitorHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+    marginBottom: PremiumSpacing.md,
+  },
+  monitorTitle: {
+    flex: 1,
+    marginBottom: 0,
+  },
+  threatPill: {
+    ...PremiumTypography.caption,
+    color: PremiumColors.redLight,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: PremiumColors.redGlow,
+    backgroundColor: PremiumColors.redSoft,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    overflow: 'hidden',
+  },
   actions: {
     marginTop: PremiumSpacing.sm,
     marginBottom: PremiumSpacing.md,
@@ -502,5 +677,16 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: PremiumColors.textTertiary,
     marginBottom: PremiumSpacing.xl,
+  },
+  bottomSpacer: {
+    height: 42,
+  },
+  floatingCta: {
+    position: 'absolute',
+    left: PremiumSpacing.lg,
+    right: PremiumSpacing.lg,
+    bottom: Platform.select({ web: 82, default: 14 }),
+    alignSelf: 'center',
+    maxWidth: 480,
   },
 });
