@@ -74,7 +74,7 @@ export function FilePickerField({ file, onChange }: FilePickerFieldProps) {
 
   return (
     <View style={styles.wrap}>
-      <Text style={styles.label}>Proof of application</Text>
+      <Text style={styles.label}>Proof of job submission</Text>
       <Text style={styles.hint}>Screenshot, image, or PDF</Text>
 
       <View style={styles.actions}>

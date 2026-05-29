@@ -11,7 +11,7 @@ export function LuxuryHeader() {
         </View>
         <View style={styles.brandStack}>
           <Text style={styles.brand}>Escape The Wedding</Text>
-          <Text style={styles.brandMeta}>Application-led delay operations</Text>
+          <Text style={styles.brandMeta}>Job-submission delay operations</Text>
         </View>
       </View>
     </View>

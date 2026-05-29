@@ -33,7 +33,7 @@ export default function UploadScreen() {
     if (!firebaseReady) {
       Alert.alert(
         'Firebase not configured',
-        'Add your Firebase keys to .env before submitting applications.'
+        'Add your Firebase keys to .env before submitting job submissions.'
       );
       return;
     }
@@ -69,14 +69,14 @@ export default function UploadScreen() {
 
       Alert.alert(
         'Application submitted',
-        'Your upload is pending admin review. Approved applications extend the countdown by 14 days.',
+        'Your upload is pending admin review. Approved job submissions extend the countdown by 14 days.',
         [{ text: 'Done', onPress: () => router.back() }]
       );
     } catch (submitError) {
       const message =
         submitError instanceof Error
           ? submitError.message
-          : 'Unable to submit application.';
+          : 'Unable to submit job submission.';
       setError(message);
     } finally {
       setSubmitting(false);
@@ -86,9 +86,9 @@ export default function UploadScreen() {
   return (
     <PremiumScreen>
       <Text style={styles.overline}>Submit proof</Text>
-      <Text style={styles.title}>Upload application</Text>
+      <Text style={styles.title}>Upload job submission</Text>
       <Text style={styles.subtitle}>
-        Attach evidence of a real job application. Once approved, your wedding
+        Attach evidence of a real job submission. Once approved, your wedding
         countdown receives a 14-day extension.
       </Text>
 

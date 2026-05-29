@@ -79,7 +79,7 @@ export default function AdminScreen() {
         <Text style={styles.overline}>Admin access</Text>
         <Text style={styles.title}>Review dashboard</Text>
         <Text style={styles.subtitle}>
-          Enter the admin PIN to approve or reject uploaded applications.
+          Enter the admin PIN to approve or reject uploaded job submissions.
         </Text>
 
         <GlassCard enteringDelay={0}>
@@ -147,7 +147,7 @@ export default function AdminScreen() {
       ))}
 
       {!loading && filteredApplications.length === 0 ? (
-        <Text style={styles.empty}>No applications in this view.</Text>
+        <Text style={styles.empty}>No job submissions in this view.</Text>
       ) : null}
     </PremiumScreen>
   );

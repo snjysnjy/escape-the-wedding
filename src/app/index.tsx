@@ -58,11 +58,11 @@ export default function HomeScreen() {
   } = useApplications();
   
   // Custom Logic for your specific rules
-  const approvedApps = applications.filter(a => a.status === 'approved' && a.type === 'application').length;
+  const approvedSubmissions = applications.filter(a => a.status === 'approved' && a.type === 'application').length;
   const approvedOffers = applications.filter(a => a.status === 'approved' && a.type === 'offer').length;
   
-  // Rule: 10 apps = 14 days, 2 offers = 30 days
-  const extensionDays = (Math.floor(approvedApps / 10) * 14) + (Math.floor(approvedOffers / 2) * 30);
+  // Rule: 10 job submissions = 14 days, 2 offers = 30 days
+  const extensionDays = (Math.floor(approvedSubmissions / 10) * 14) + (Math.floor(approvedOffers / 2) * 30);
   
   // Force target date to July 24, 2026 as requested
   const baseTargetDate = new Date('2026-07-24T00:00:00');
@@ -107,7 +107,7 @@ export default function HomeScreen() {
     return () => clearInterval(timer);
   }, []);
 
-  const totalApproved = approvedApps + approvedOffers;
+  const totalApproved = approvedSubmissions + approvedOffers;
   const mitigation = Math.min(35, totalApproved * 4);
   const probability = getMarriageProbability(timeLeft.days, mitigation);
   const probabilityLabel = useMemo(
@@ -195,7 +195,7 @@ export default function HomeScreen() {
               <Text style={styles.briefHeading}>Ways To Extend Time</Text>
               <View style={styles.briefRules}>
                 <View style={styles.briefRule}>
-                  <Text style={styles.briefRuleTitle}>10 Approved Applications</Text>
+                  <Text style={styles.briefRuleTitle}>10 Approved Job Submissions</Text>
                   <Text style={styles.briefRuleValue}>+14 days</Text>
                 </View>
                 <View style={styles.briefRule}>
@@ -235,13 +235,13 @@ export default function HomeScreen() {
               <Text style={styles.targetDate}>Target Deadline · {targetLabel}</Text>
               
               <Text style={styles.extensionNote}>
-                +{extensionDays} days secured · ({approvedApps}/10 Apps) · ({approvedOffers}/2 Offers)
+                +{extensionDays} days secured · ({approvedSubmissions}/10 Job Submissions) · ({approvedOffers}/2 Offers)
               </Text>
               
               <View style={styles.heroStats}>
                 <View style={styles.heroStat}>
-                  <Text style={styles.heroStatValue}>{approvedApps}</Text>
-                  <Text style={styles.heroStatLabel}>Apps Approved</Text>
+                  <Text style={styles.heroStatValue}>{approvedSubmissions}</Text>
+                  <Text style={styles.heroStatLabel}>Job Submissions Approved</Text>
                 </View>
                 <View style={styles.heroStatDivider} />
                 <View style={styles.heroStat}>

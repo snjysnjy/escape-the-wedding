@@ -35,4 +35,4 @@ Set `EXPO_PUBLIC_ADMIN_PIN` in `.env`, then open the **Admin** tab and enter the
 
 ## Countdown extensions
 
-Each **approved** application adds **14 days** to the wedding countdown target date.
+Each **approved** job submission adds **14 days** to the wedding countdown target date.
