@@ -188,9 +188,28 @@ export default function HomeScreen() {
 
           <Animated.View entering={FadeIn.duration(800)} style={styles.intro}>
             <Text style={styles.kicker}>The Ultimatum Status</Text>
-            <Text style={styles.subtitle}>
-              Track the countdown, submit proof. 10 Apps = 2 Weeks. 2 Offers = 1 Month. Don't let the grandmas win.
-            </Text>
+            <View style={styles.briefBlock}>
+              <Text style={styles.briefHeading}>Objective</Text>
+              <Text style={styles.subtitle}>Secure employment before the deadline.</Text>
+
+              <Text style={styles.briefHeading}>Ways To Extend Time</Text>
+              <View style={styles.briefRules}>
+                <View style={styles.briefRule}>
+                  <Text style={styles.briefRuleTitle}>10 Approved Applications</Text>
+                  <Text style={styles.briefRuleValue}>+14 days</Text>
+                </View>
+                <View style={styles.briefRule}>
+                  <Text style={styles.briefRuleTitle}>2 Approved Offer Letters</Text>
+                  <Text style={styles.briefRuleValue}>+30 days</Text>
+                </View>
+              </View>
+
+              <Text style={styles.briefHeading}>Verification</Text>
+              <Text style={styles.subtitle}>All evidence is subject to administrative review.</Text>
+
+              <Text style={styles.briefHeading}>Consequence</Text>
+              <Text style={styles.subtitle}>Grandmothers may initiate groom discovery operations.</Text>
+            </View>
           </Animated.View>
 
           <View onLayout={handleSectionLayout('countdown')}>
@@ -353,6 +372,38 @@ const styles = StyleSheet.create({
   subtitle: {
     ...PremiumTypography.subtitle,
     maxWidth: 380,
+  },
+  briefBlock: {
+    gap: 10,
+  },
+  briefHeading: {
+    ...PremiumTypography.overline,
+    color: PremiumColors.gold,
+    marginTop: 6,
+  },
+  briefRules: {
+    gap: 8,
+  },
+  briefRule: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: PremiumColors.border,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    backgroundColor: PremiumColors.surfacePressed,
+  },
+  briefRuleTitle: {
+    ...PremiumTypography.body,
+    color: PremiumColors.textPrimary,
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  briefRuleValue: {
+    ...PremiumTypography.status,
+    color: PremiumColors.cyan,
+    fontSize: 18,
+    lineHeight: 24,
+    marginTop: 2,
   },
   sectionLabel: {
     ...PremiumTypography.overline,
