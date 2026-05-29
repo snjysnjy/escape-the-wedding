@@ -24,6 +24,7 @@ function mapDoc(id: string, data: Record<string, unknown>): ApplicationRecord {
 
   return {
     id,
+    type: data.type === 'offer' ? 'offer' : 'application',
     companyName: String(data.companyName ?? ''),
     roleAppliedFor: String(data.roleAppliedFor ?? ''),
     fileUrl: String(data.fileUrl ?? ''),

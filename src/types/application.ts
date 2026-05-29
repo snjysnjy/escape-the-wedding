@@ -1,7 +1,9 @@
 export type ApplicationStatus = 'pending' | 'approved' | 'rejected';
+export type ApplicationType = 'application' | 'offer';
 
 export type ApplicationRecord = {
   id: string;
+  type: ApplicationType;
   companyName: string;
   roleAppliedFor: string;
   fileUrl: string;
@@ -15,6 +17,7 @@ export type ApplicationRecord = {
 };
 
 export type CreateApplicationInput = {
+  type?: ApplicationType;
   companyName: string;
   roleAppliedFor: string;
   fileUrl: string;

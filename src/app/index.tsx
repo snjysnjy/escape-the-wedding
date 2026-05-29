@@ -1,7 +1,6 @@
 import { router } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Image,
   LayoutChangeEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -44,6 +43,9 @@ const FAMILY_STATUSES = [
 
 type SectionId = 'countdown' | 'probability' | 'monitoring' | 'applications';
 
+const BRIDAL_AVATAR = require('@/assets/images/avatar-bridal.png');
+const CORPORATE_AVATAR = require('@/assets/images/avatar-corporate.png');
+
 function padTime(value: number) {
   return String(Math.max(0, value)).padStart(2, '0');
 }
@@ -66,7 +68,7 @@ export default function HomeScreen() {
   const baseTargetDate = new Date('2026-07-24T00:00:00');
   const targetDateWithExtensions = new Date(baseTargetDate.getTime() + (extensionDays * 24 * 60 * 60 * 1000));
   
-  const { timeLeft } = useCountdown(extensionDays, baseTargetDate);
+  const { timeLeft } = useCountdown(extensionDays);
 
   const scrollRef = useRef<ScrollView>(null);
   const sectionOffsets = useRef<Record<SectionId, number>>({
@@ -171,11 +173,11 @@ export default function HomeScreen() {
           <Animated.View entering={FadeIn.duration(800)} style={styles.avatarSection}>
             <View style={styles.avatarContainer}>
               <Animated.Image 
-                source={{ uri: 'https://api.dicebear.com/7.x/notionists/png?seed=bride&backgroundColor=ffdfbf' }} 
+                source={BRIDAL_AVATAR}
                 style={[styles.avatarImg, shaadiStyle]} 
               />
               <Animated.Image 
-                source={{ uri: 'https://api.dicebear.com/7.x/notionists/png?seed=office&backgroundColor=c0aede&glasses=probability:100' }} 
+                source={CORPORATE_AVATAR}
                 style={[styles.avatarImg, corporateStyle]} 
               />
             </View>
